@@ -60,9 +60,7 @@ playerProfile* deleteNode(playerProfile *Q, char name[]){
 		Q->pi=tmp->pi;
 		Q->right=deleteNode(Q->right,Q->pi.name);
 	}
-	else if(Q->left||Q->right
-	
-	){
+	else if(Q->left||Q->right){
 		playerProfile *tmp=Q;
 		if(!Q->right) 
 			Q=Q->left;
@@ -112,16 +110,16 @@ void preorder(playerProfile *P){
 void inorder(playerProfile *P){
 	
 	if(P->left)
-		inorder(P->left);
+		preorder(P->left);
 	displayPlayer(P->pi);
 	if(P->right)
-		inorder(P->right);
+		preorder(P->right);
 }
 
 void postorder(playerProfile *P){
 	if(P->left)
-		postorder(P->left);
+		preorder(P->left);
 	if(P->right)
-		postorder(P->right);
+		preorder(P->right);
 	displayPlayer(P->pi);
 }
