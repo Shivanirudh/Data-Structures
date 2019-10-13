@@ -56,7 +56,7 @@ void disp(priorityQueueADT *P,int index){
 	}
 }
 
-empDetails delete(priorityQueueADT *P){
+empDetails delete(priorityQueueADT *P){ 
 	int i,child;
 	empDetails min,last;
 	min=P->emp[1];
