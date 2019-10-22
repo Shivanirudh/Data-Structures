@@ -27,9 +27,9 @@ void disp(cityADT *c){
 	printf("The connections are from:\n");
 	for(int i=0;i<c->NoC;i++){
 		for(int j=0;j<c->NoC;j++){
-			if(c->ConMat[i][j]==1)
-				printf(" %s to %s at cost %d \n",c->data[i].name,c->data[j].name,c->EdgeCost[i][j]);
+			printf("%d ",c->EdgeCost[i][j]);
 		}
+		printf("\n");
 	}
 }
 
@@ -42,9 +42,9 @@ int checkVisit(cityADT *c){
 
 void displayTable(cityADT *c){
 	printf("\n\n");
-	printf(" Vertex\tVisited\tCost\tPath \n");
+	printf(" V\t  K\t  C\t  P \n");
 	for(int i=0;i<c->NoC;i++){
-		printf(" %s%-9d%-10d%-8s \n",c->data[i].name,c->data[i].visit,c->data[i].cost,c->data[i].path);
+		printf(" %-9s%-9d%-9d%-9s \n",c->data[i].name,c->data[i].visit,c->data[i].cost,c->data[i].path);
 	}
 }
 
@@ -73,18 +73,24 @@ void Dijkstra_Algorithm(cityADT *c,char source[]){
 	
 	while(checkVisit(c)){
 		
-		if(c->data[i].visit==0)
+		if(c->data[i].visit==0){
+			c->data[i].visit=1;
 			j=i;
+		}
 		else{
-			c->data[j].cost=1000;
+			
+			for(int b=0;b<c->NoC;b++){
+				if(c->data[b].visit==0){
+					j=b;
+					break;
+				}
+			}
 			for(int a=0;a<c->NoC;a++){
 				if(c->data[a].visit==0){
-					if(c->ConMat[j][a]){
-						if(c->data[a].cost<c->data[j].cost){
-							j=a;
-							break;
-						}
+					if(c->data[a].cost<c->data[j].cost){
+						j=a;
 					}
+					
 				}
 			}
 		}
@@ -92,12 +98,10 @@ void Dijkstra_Algorithm(cityADT *c,char source[]){
 		c->data[j].visit=1;
 		
 		for(int a=0;a<c->NoC;a++){
-			if(c->ConMat[j][a]){
-				if(c->data[a].visit==0){
-					if(c->data[j].cost+c->EdgeCost[j][a]<c->data[a].cost){
-						c->data[a].cost=c->data[j].cost+c->EdgeCost[j][a];
-						strcpy(c->data[a].path,c->data[j].name);
-					}
+			if(c->ConMat[j][a]&&c->data[a].visit==0){
+				if(c->data[j].cost+c->EdgeCost[j][a]<c->data[a].cost){
+					c->data[a].cost=c->data[j].cost+c->EdgeCost[j][a];
+					strcpy(c->data[a].path,c->data[j].name);
 				}
 			}
 		}
@@ -170,19 +174,24 @@ char* displayPath(cityADT *c,char source[],char dest[]){
 	}
 	
 	char path[100];
-	strcpy(path,c->data[j].path);
+	strcat(way,dest);
+	
 	if(connect(c,source,dest)){
 		if(c->data[j].path[0]){
-			while(strcmp(path,source)){
-				strcat(way,path);
+			strcpy(path,c->data[j].path);
+			strcat(way,path);
+			while(strcmp(path,source)!=0){
+				
 				for(int a=0;a<c->NoC;a++){
-					if(!strcmp(c->data[a].path,c->data[j].path)){
-						strcpy(path,c->data[a].path);
+					if(!strcmp(c->data[a].name,c->data[j].path)){
 						j=a;
+						strcpy(path,c->data[a].name);
 						break;
 					}
 				}
 			}
+			
+			strcat(way,source);
 			strrev(way);
 			return way;
 		}
