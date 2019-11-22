@@ -372,8 +372,9 @@ void displayCurrentGrid(Cell* control,int grid_size,int attempts[][2],int attemp
 						//Content of Cell
 						if(tmp->content=='M')
 							printf(" %c |",tmp->content);
-						else
+						else{
 							printf(" %d |",tmp->no_mines);
+						}
 						break;
 					}
 				}
